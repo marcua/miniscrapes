@@ -6,7 +6,6 @@ import pytest
 
 from click.testing import CliRunner
 
-from miniscrapes import miniscrapes
 from miniscrapes import cli
 
 
