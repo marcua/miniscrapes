@@ -2,14 +2,20 @@
 import sys
 import click
 
+from miniscrapes.execution import run_scrapers
 
-@click.command()
+
+@click.group()
 def main(args=None):
-    """Console script for miniscrapes."""
-    click.echo("Replace this message by putting your code into "
-               "miniscrapes.cli.main")
-    click.echo("See click documentation at https://click.palletsprojects.com/")
-    return 0
+    pass
+
+
+@main.command()
+@click.option('--to', required=True, help='Miniscrape recipient email')
+@click.option('--zip-code', required=True, help='Zipcode to scrape')
+@click.option('--state', required=True, help='State to scrape')
+def email_scrapers(to, zip_code, state):
+    run_scrapers(to, zip_code, state)
 
 
 if __name__ == "__main__":
