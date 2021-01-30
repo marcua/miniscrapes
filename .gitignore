@@ -106,3 +106,6 @@ ENV/
 
 # Emacs temporary files
 *~
+
+# Local secrets file
+load_secrets.sh

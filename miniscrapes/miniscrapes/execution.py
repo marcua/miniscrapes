@@ -8,9 +8,9 @@ SCRAPERS = {
 }
 
 
-def run_scrapers(recipient, zip_code, state):
+def run_scrapers(zip_code: str, state: str):
     results = {}
     for slug, scraper in SCRAPERS.items():
         results[slug] = scraper(zip_code, state)
 
-    print(results)
+    return results
