@@ -103,3 +103,9 @@ ENV/
 
 # IDE settings
 .vscode/
+
+# Emacs temporary files
+*~
+
+# Local secrets file
+load_secrets.sh
