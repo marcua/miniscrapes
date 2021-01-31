@@ -18,7 +18,7 @@ def weather(zip_code: str, state: str, units: str = 'imperial'):
         f'lat={lat}'
         f'&lon={lon}'
         f'&units={units}'
-        f'&appid={OPEN_WEATHER_MAP_KEY}')    
+        f'&appid={OPEN_WEATHER_MAP_KEY}')
     results = response.json()
     today = results['daily'][0]
     descriptions = ', '.join(
@@ -32,7 +32,7 @@ def weather(zip_code: str, state: str, units: str = 'imperial'):
 
 
 def covid(zip_code: str, state: str):
-    # TODO(marcua): Internationalize.    
+    # TODO(marcua): Internationalize.
     response = requests.get(
         f'https://api.covidtracking.com/v1/states/{state}/current.json')
     results = response.json()

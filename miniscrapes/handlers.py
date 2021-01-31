@@ -12,7 +12,7 @@ EXTRACTORS = (
     ('weather', (
         ('Lo', 'today/min'),
         ('Hi', 'today/max'),
-        ('Feels', 'today/feels_like'),                
+        ('Feels', 'today/feels_like'),
         ('Weather', 'today/description'))),
     ('covid', (
         ('Positive rate', 'dayPositiveRate'), ))
@@ -20,17 +20,18 @@ EXTRACTORS = (
 
 
 def send_simple_message(to: str, subject: str, text: str):
-    return requests.post(
+    requests.post(
         f'https://api.mailgun.net/v3/{MAILGUN_OUTGOING_DOMAIN}/messages',
         auth=('api', MAILGUN_KEY),
         data={
             'from': 'Miniscrapes daily email <marcua@marcua.net>',
             'to': [to],
             'subject': subject,
-            'text': text})
+            'text': text}).raise_for_status()
+
 
 def _extract_result(scrape: str, results: dict,
-                    extractors: Tuple[Tuple[str, str]]):
+                    extractors: Tuple[Tuple[str, str], ...]) -> str:
     extracted = '\n'.join(
         f"{description}: {dpath.util.get(results, path)}"
         for description, path in extractors)
@@ -51,7 +52,4 @@ def email_results(to: str, results: dict):
 
     {extracted}
     ''')
-        
     send_simple_message(to, 'Your morning miniscrapes', text)
-
-    
