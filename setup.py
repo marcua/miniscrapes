@@ -34,7 +34,7 @@ setup(
     description="lil' pieces of data, one miniscrape at a time",
     entry_points={
         'console_scripts': [
-            'miniscrapes=miniscrapes.cli:main',
+            'miniscrapes=miniscrapes.cli:miniscrapes',
         ],
     },
     install_requires=requirements,
@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/marcua/miniscrapes',
-    version='0.1.1',
+    version='0.1.2',
     zip_safe=False,
 )
