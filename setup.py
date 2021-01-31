@@ -34,7 +34,7 @@ setup(
     description="lil' pieces of data, one miniscrape at a time",
     entry_points={
         'console_scripts': [
-            'miniscrapes=miniscrapes.cli:main',
+            'miniscrapes=miniscrapes.cli:miniscrapes',
         ],
     },
     install_requires=requirements,
