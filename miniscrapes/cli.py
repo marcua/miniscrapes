@@ -7,11 +7,11 @@ from miniscrapes.handlers import email_results
 
 
 @click.group()
-def main(args=None):
+def miniscrapes(args=None):
     pass
 
 
-@main.command()
+@miniscrapes.command()
 @click.option('--to', required=True, help='Miniscrape recipient email')
 @click.option('--zip-code', required=True, help='Zipcode to scrape')
 @click.option('--state', required=True, help='State to scrape')
@@ -21,4 +21,4 @@ def email_scrapers(to: str, zip_code: str, state: str):
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    sys.exit(miniscrapes())  # pragma: no cover
