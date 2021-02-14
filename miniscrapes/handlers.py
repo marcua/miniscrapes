@@ -9,7 +9,7 @@ from typing import List
 from typing import Tuple
 
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 MAILGUN_KEY = os.getenv('MAILGUN_KEY')
 MAILGUN_OUTGOING_DOMAIN = os.getenv('MAILGUN_OUTGOING_DOMAIN')
 EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
