@@ -7,7 +7,7 @@ from pyzipcode import ZipCodeDatabase
 OPEN_WEATHER_MAP_KEY = os.getenv('OPEN_WEATHER_MAP_KEY')
 
 
-def weather(zip_code: str, state: str, units: str = 'imperial'):
+def weather(*, zip_code: str, units: str = 'imperial'):
     # TODO(marcua): Internationalize.
     zcdb = ZipCodeDatabase()
     code = zcdb[zip_code]
@@ -31,7 +31,7 @@ def weather(zip_code: str, state: str, units: str = 'imperial'):
     return results
 
 
-def covid(zip_code: str, state: str):
+def covid(*, state: str):
     # TODO(marcua): Internationalize.
     response = requests.get(
         f'https://api.covidtracking.com/v1/states/{state}/current.json')

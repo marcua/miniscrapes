@@ -1,16 +1,21 @@
+from typing import Callable
+from typing import Dict
+
 from miniscrapes.scrapers import covid
 from miniscrapes.scrapers import weather
 
 
-SCRAPERS = {
+SCRAPERS: Dict[str, Callable] = {
     'covid': covid,
     'weather': weather
 }
 
 
-def run_scrapers(zip_code: str, state: str):
+def run_scrapers(scrapers: Dict[str, dict]):
     results = {}
-    for slug, scraper in SCRAPERS.items():
-        results[slug] = scraper(zip_code, state)
+    for slug, scraper in scrapers.items():
+        scraper_slug: str = scraper['scraper']
+        kwargs: dict = scraper['args']
+        results[slug] = SCRAPERS[scraper_slug](**kwargs)
 
     return results
