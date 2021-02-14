@@ -26,5 +26,6 @@ jobs:
         MINISCRAPES_TOML_FILES: ${{ secrets.MINISCRAPES_TOML_FILES }}
       run: |-
         mkdir tmp-toml/
-        echo $MINISCRAPES_TOML_FILES | awk '/----------/{n++}{print >"tmp-toml/config" n ".toml" }'
+        echo $MINISCRAPES_TOML_FILES > tmp-toml/all.txt
+        csplit --suppress-matched tmp-toml/all.txt /----------/ {*}
         find . -name "tmp-toml/*.toml" -exec miniscrapes execute-scrapers --config-file {} \;
