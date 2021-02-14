@@ -14,7 +14,7 @@ def miniscrapes(args=None):
 
 
 @miniscrapes.command()
-@click.option('--config-file', type=click.File('r'))
+@click.option('--config-file', type=click.File('r'), required=True)
 def execute_scrapers(config_file: TextIO):
     config = read_config(config_file)
     results = run_scrapers(config['scrapers'])

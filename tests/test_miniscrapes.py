@@ -32,4 +32,4 @@ def test_command_line_interface():
     assert result.exit_code == 0
     assert result.output == ('Usage: miniscrapes [OPTIONS] COMMAND [ARGS]...'
                              '\n\nOptions:\n  --help  Show this message and '
-                             'exit.\n\nCommands:\n  email-scrapers\n')
+                             'exit.\n\nCommands:\n  execute-scrapers\n')
