@@ -27,5 +27,5 @@ jobs:
       run: |-
         mkdir tmp-toml/
         echo "$MINISCRAPES_TOML_FILES" > tmp-toml/all.txt
-        csplit --suppress-matched tmp-toml/all.txt /----------/ {*}
+        csplit --suppress-matched --prefix=tmp-toml/ --suffix=%02d.toml tmp-toml/all.txt /----------/ {*}
         find . -name "tmp-toml/*.toml" -exec miniscrapes execute-scrapers --config-file {} \;
