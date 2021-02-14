@@ -23,5 +23,9 @@ jobs:
         MAILGUN_KEY: ${{ secrets.MAILGUN_KEY }}
         MAILGUN_OUTGOING_DOMAIN: ${{ secrets.MAILGUN_OUTGOING_DOMAIN }}
         OPEN_WEATHER_MAP_KEY: ${{ secrets.OPEN_WEATHER_MAP_KEY }}
+        MINISCRAPES_TOML_FILES: ${{ secrets.MINISCRAPES_TOML_FILES }}
       run: |-
-        miniscrapes email-scrapers --to ${{ secrets.TO_EMAIL }} --zip-code ${{ secrets.ZIP_CODE }} --state ${{ secrets.STATE }}
+        mkdir tmp-toml/
+        echo "$MINISCRAPES_TOML_FILES" > tmp-toml/all.txt
+        csplit --quiet --suppress-matched --prefix=tmp-toml/ --suffix=%02d.toml tmp-toml/all.txt /----------/ {*}
+        find tmp-toml -name "*.toml" -exec miniscrapes execute-scrapers --config-file {} \;

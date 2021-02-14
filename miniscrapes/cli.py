@@ -1,7 +1,9 @@
 """Console script for miniscrapes."""
 import sys
 import click
+from typing import TextIO
 
+from miniscrapes.config import read_config
 from miniscrapes.execution import run_scrapers
 from miniscrapes.handlers import email_results
 
@@ -12,12 +14,15 @@ def miniscrapes(args=None):
 
 
 @miniscrapes.command()
-@click.option('--to', required=True, help='Miniscrape recipient email')
-@click.option('--zip-code', required=True, help='Zipcode to scrape')
-@click.option('--state', required=True, help='State to scrape')
-def email_scrapers(to: str, zip_code: str, state: str):
-    results = run_scrapers(zip_code, state)
-    email_results(to, results)
+@click.option('--config-file', type=click.File('r'), required=True)
+def execute_scrapers(config_file: TextIO):
+    config = read_config(config_file)
+    results = run_scrapers(config['scrapers'])
+    assert(config['handler']['type'] == 'email')
+    email_results(
+        config['handler']['email'],
+        config['name'],
+        config['scrapers'], results)
 
 
 if __name__ == "__main__":

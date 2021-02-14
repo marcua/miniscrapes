@@ -1,22 +1,27 @@
 import dpath.util
+import logging
 import os
 import requests
-import textwrap
 
+from typing import Callable
+from typing import Dict
+from typing import List
 from typing import Tuple
 
 
+logger = logging.getLogger(__name__)
 MAILGUN_KEY = os.getenv('MAILGUN_KEY')
 MAILGUN_OUTGOING_DOMAIN = os.getenv('MAILGUN_OUTGOING_DOMAIN')
-EXTRACTORS = (
-    ('weather', (
-        ('Lo', 'today/min'),
-        ('Hi', 'today/max'),
-        ('Feels', 'today/feels_like'),
-        ('Weather', 'today/description'))),
-    ('covid', (
-        ('Positive rate', 'dayPositiveRate'), ))
-)
+EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
+    'weather': (
+        ('Low', 'today/min', lambda x: x),
+        ('High', 'today/max', lambda x: x),
+        ('Feels like', 'today/feels_like', lambda x: x),
+        ('Weather', 'today/description', lambda x: x)),
+    'covid': (
+        ('Positive rate', 'dayPositiveRate',
+         lambda x: f'{round(100.0 * x, 2)}%'), )
+}
 
 
 def send_simple_message(to: str, subject: str, text: str):
@@ -31,25 +36,28 @@ def send_simple_message(to: str, subject: str, text: str):
 
 
 def _extract_result(scrape: str, results: dict,
-                    extractors: Tuple[Tuple[str, str], ...]) -> str:
-    extracted = '\n'.join(
-        f"{description}: {dpath.util.get(results, path)}"
-        for description, path in extractors)
-    return textwrap.dedent(f'''
-    {scrape.capitalize()}
-    ---
-    {extracted}
-    ''')
+                    extractors: Tuple[Tuple[str, str, Callable], ...]) -> str:
+    extracted_list: List[str] = []
+    for description, path, formatter in extractors:
+        try:
+            formatted = formatter(dpath.util.get(results, path))
+        except Exception:
+            formatted = '***Error formatting result***'
+            logger.exception('Error formatting result')
+        extracted_list.append(f'  * {description}: {formatted}')
+    extracted = '\n'.join(extracted_list)
+    formatted_results = f'{scrape}\n{extracted}'
+    return formatted_results
 
 
-def email_results(to: str, results: dict):
+def email_results(to: str, subject: str,
+                  scrapers: Dict[str, dict], results: dict):
     extracted = '\n\n'.join(
-        _extract_result(scrape, results[scrape], extractors)
-        for scrape, extractors in EXTRACTORS)
-    text = textwrap.dedent(
-        f'''
-    Good morning! Here are your miniscrapes!
-
-    {extracted}
-    ''')
-    send_simple_message(to, 'Your morning miniscrapes', text)
+        _extract_result(
+            scraper_config['name'],
+            results[scraper_slug],
+            EXTRACTORS[scraper_config['extractor']])
+        for scraper_slug, scraper_config
+        in scrapers.items())
+    text = f'Good morning! Here are your miniscrapes!\n\n{extracted}'
+    send_simple_message(to, subject, text)
