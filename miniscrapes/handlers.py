@@ -1,14 +1,18 @@
 import dpath.util
+import logging
 import os
 import requests
 
+from typing import Callable
 from typing import Dict
+from typing import List
 from typing import Tuple
 
 
+logger = logging.getLogger(__name__) 
 MAILGUN_KEY = os.getenv('MAILGUN_KEY')
 MAILGUN_OUTGOING_DOMAIN = os.getenv('MAILGUN_OUTGOING_DOMAIN')
-EXTRACTORS = {
+EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
     'weather': (
         ('Low', 'today/min', lambda x: x),
         ('High', 'today/max', lambda x: x),
@@ -32,10 +36,16 @@ def send_simple_message(to: str, subject: str, text: str):
 
 
 def _extract_result(scrape: str, results: dict,
-                    extractors: Tuple[Tuple[str, str], ...]) -> str:
-    extracted = '\n'.join(
-        f'  * {description}: {formatter(dpath.util.get(results, path))}'
-        for description, path, formatter in extractors)
+                    extractors: Tuple[Tuple[str, str, Callable], ...]) -> str:
+    extracted_list: List[str] = []
+    for description, path, formatter in extractors:
+        try:
+            formatted = formatter(dpath.util.get(results, path))
+        except Exception:
+            formatted = '***Error formatting result***'
+            logger.exception('Error formatting result')
+        extracted_list.append(f'  * {description}: {formatted}')
+    extracted = '\n'.join(extracted_list)
     formatted_results = f'{scrape}\n{extracted}'
     return formatted_results
 
