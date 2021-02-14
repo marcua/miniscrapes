@@ -109,3 +109,6 @@ ENV/
 
 # Local secrets file
 load_secrets.sh
+
+# Local toml configs
+tomls/
