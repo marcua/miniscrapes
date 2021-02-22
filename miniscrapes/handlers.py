@@ -12,11 +12,19 @@ from typing import Tuple
 logger = logging.getLogger(__name__)
 MAILGUN_KEY = os.getenv('MAILGUN_KEY')
 MAILGUN_OUTGOING_DOMAIN = os.getenv('MAILGUN_OUTGOING_DOMAIN')
+
+
+def format_temperature(temp: dict):
+    return f"{round(temp['temp'])} (Feels like {round(temp['feels_like'])})"
+
+
 EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
     'weather': (
-        ('Low', 'today/min', lambda x: x),
-        ('High', 'today/max', lambda x: x),
-        ('Feels like', 'today/feels_like', lambda x: x),
+        ('Morning', 'today/morning', format_temperature),
+        ('Daytime', 'today/day', format_temperature),
+        ('Evening', 'today/evening', format_temperature),
+        ('Night', 'today/night', format_temperature),
+        ('UV index', 'today/uvi', lambda x: round(x)),
         ('Weather', 'today/description', lambda x: x)),
     'covid': (
         ('Positive rate', 'dayPositiveRate',

@@ -24,9 +24,23 @@ def weather(*, zip_code: str, units: str = 'imperial'):
     descriptions = ', '.join(
         entry['description'] for entry in today['weather'])
     results['today'] = {
-        'min': today['temp']['min'],
-        'max': today['temp']['max'],
-        'feels_like': today['feels_like']['day'],
+        'morning': {
+            'temp': today['temp']['morn'],
+            'feels_like': today['feels_like']['morn']
+        },
+        'day': {
+            'temp': today['temp']['day'],
+            'feels_like': today['feels_like']['day']
+        },
+        'evening': {
+            'temp': today['temp']['eve'],
+            'feels_like': today['feels_like']['eve']
+        },
+        'night': {
+            'temp': today['temp']['night'],
+            'feels_like': today['feels_like']['night']
+        },
+        'uvi': today['uvi'],
         'description': descriptions}
     return results
 
