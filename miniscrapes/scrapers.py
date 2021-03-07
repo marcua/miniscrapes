@@ -47,6 +47,7 @@ def weather(*, zip_code: str, units: str = 'imperial'):
 
 def nyt_covid(*, county_code: str):
     response = requests.get(
-        f'https://static01.nyt.com/newsgraphics/2021/coronavirus-tracking/data/usa-risk-levels.json')
+        'https://static01.nyt.com/newsgraphics/2021/'
+        'coronavirus-tracking/data/usa-risk-levels.json')
     results = response.json()
     return results.get('counties', {}).get(county_code, {})
