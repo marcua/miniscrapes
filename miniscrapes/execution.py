@@ -1,12 +1,12 @@
 from typing import Callable
 from typing import Dict
 
-from miniscrapes.scrapers import covid
+from miniscrapes.scrapers import nyt_covid
 from miniscrapes.scrapers import weather
 
 
 SCRAPERS: Dict[str, Callable] = {
-    'covid': covid,
+    'nyt_covid': nyt_covid,
     'weather': weather
 }
 
