@@ -28,8 +28,8 @@ EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
         ('Weather', 'today/description', lambda x: x)),
     'nyt_covid': (
         ('Cases per 100K',
-         'cases_avg_14day_per_100k', lambda x: round(x)),
-        ('Risk level', 'risk_level', lambda x: f'{x}/5'))
+         'cases_avg_per_100k', lambda x: round(x)),
+        ('Latest date', 'date', lambda x: x))
 }
 
 

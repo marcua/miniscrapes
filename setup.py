@@ -10,7 +10,13 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', ]
+requirements = [
+    'Click>=7.0',
+    'dpath==2.0.1',
+    'duckdb==0.3.2',
+    'pytomlpp==0.3.5',
+    'pyzipcode==2.0.0',
+    'requests==2.25.1']
 
 setup_requirements = ['pytest-runner', ]
 
