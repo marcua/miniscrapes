@@ -29,6 +29,7 @@ EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
     'nyt_covid': (
         ('Cases per 100K',
          'cases_avg_per_100k', lambda x: round(x)),
+        # Helps identify whether the data source is stale.
         ('Latest date', 'date', lambda x: x))
 }
 
