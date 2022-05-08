@@ -18,6 +18,10 @@ def format_temperature(temp: dict):
     return f"{round(temp['temp'])} (Feels like {round(temp['feels_like'])})"
 
 
+def format_air_quality(quality: dict):
+    return f"{quality['index']} ({quality['category']})"
+
+
 EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
     'weather': (
         ('Morning', 'today/morning', format_temperature),
@@ -30,7 +34,10 @@ EXTRACTORS: Dict[str, Tuple[Tuple[str, str, Callable], ...]] = {
         ('Cases per 100K',
          'cases_avg_per_100k', lambda x: round(x)),
         # Helps identify whether the data source is stale.
-        ('Latest date', 'date', lambda x: x))
+        ('Latest date', 'date', lambda x: x)),
+    'airnow_air_quality': (
+        ('PM2.5', 'pm25', format_air_quality),
+        ('Ozone', 'ozone', format_air_quality))
 }
 
 
