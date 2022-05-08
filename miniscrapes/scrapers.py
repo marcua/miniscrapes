@@ -77,6 +77,8 @@ def nyt_covid(*, state: str, county: str):
 
 
 def airnow_air_quality(*, state_code, reporting_area):
+    # Modeled off of
+    # https://www.airnow.gov/?reportingArea=Adirondacks%20Region&stateCode=NY
     response = requests.post(
         'https://airnowgovapi.com/reportingarea/get_state',
         data={'state_code': state_code})
