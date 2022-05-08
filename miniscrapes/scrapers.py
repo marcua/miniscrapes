@@ -2,6 +2,7 @@ import requests
 import os
 import duckdb
 
+from datetime import date
 from functools import lru_cache
 from pyzipcode import ZipCodeDatabase
 from tempfile import NamedTemporaryFile
@@ -73,3 +74,28 @@ def nyt_covid(*, state: str, county: str):
          LIMIT 1;
     ''').fetchone()
     return {'cases_avg_per_100k': result[0], 'date': str(result[1])}
+
+
+def airnow_air_quality(*, state_code, reporting_area):
+    # Modeled off of
+    # https://www.airnow.gov/?reportingArea=Adirondacks%20Region&stateCode=NY
+    response = requests.post(
+        'https://airnowgovapi.com/reportingarea/get_state',
+        data={'state_code': state_code})
+    reporting_area = [
+        result for result in response.json()
+        if (result['reportingArea'] == reporting_area and
+            result['validDate'] == date.today().strftime('%m/%d/%y') and
+            result['dataType'] == 'F')]  # forecast
+    results = {}
+    for forecast in reporting_area:
+        prefix = None
+        if forecast['parameter'] == 'PM2.5':
+            prefix = 'pm25'
+        elif forecast['parameter'] == 'OZONE':
+            prefix = 'ozone'
+        else:
+            continue
+        results[prefix] = {
+            'index': forecast['aqi'], 'category': forecast['category']}
+    return results

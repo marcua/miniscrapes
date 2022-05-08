@@ -2,6 +2,10 @@
 History
 =======
 
+0.1.7 (2022-05-08)
+------------------
+* Added air quality index from the AirNow API.
+
 0.1.6 (2022-04-13)
 ------------------
 * Update Covid tracker to use new NYT data source (the old one is no longer
